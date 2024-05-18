@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación a la Quinceañera de Jazmín Martinez</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@400;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: url('rosas_y_mariposas.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .intro-text {
+            font-size: 14pt; /* Smaller font size */
+            color: #333;
+            margin: 0; /* No space between paragraphs */
+        }
+        .highlight, .highlight-de {
+            font-family: 'Great Vibes', cursive;
+            font-size: 32px;
+            color: #d63384;
+            margin: 0; /* No space between lines */
+        }
+        #countdown {
+            background: rgba(214, 51, 132, 0.3);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .time-segment {
+            text-align: center;
+            color: black;
+        }
+        .time-number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .time-label {
+            font-size: 14px;
+            font-weight: normal;
+        }
+        .btn, .btn-confirm {
+            background-color: #d63384;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        .btn:hover, .btn-confirm:hover {
+            background-color: #c2185b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="intro-text">Susana Romero y Jesús Martinez los invitamos a la</p>
+        <p class="highlight">Quinceañera</p>
+        <p class="highlight-de">De</p>
+        <p class="highlight">Jazmín Martinez</p>
+        <div id="countdown">
+            <div class="time-segment">
+                <div class="time-number" id="days">--</div>
+                <div class="time-label">Días</div>
+            </div>
+            <div class="time-segment">
+                <div class="time-number" id="hours">--</div>
+                <div class="time-label">Horas</div>
+            </div>
+            <div class="time-segment">
+                <div class="time-number" id="minutes">--</div>
+                <div class="time-label">Minutos</div>
+            </div>
+            <div class="time-segment">
+                <div class="time-number" id="seconds">--</div>
+                <div class="time-label">Segundos</div>
+            </div>
+        </div>
+        <div class="location">
+            <strong>Iglesia: Divine Mercy of Our Lord Catholic Church, Misa a las 2:00pm</strong>
+            <p>1585 E. Cartwright Rd., Mesquite, TX 75149</p>
+            <button class="btn" onclick="openMaps('1585 E Cartwright Rd, Mesquite, TX 75149')">Ver en el GPS</button>
+        </div>
+        <p><strong style="color:#d63384;">Recepción a las 6:00pm</strong></p>
+        <p>Cena 6:00 - 8:00 p.m., Baile 8:00 p.m. - 1:00 a.m.</p>
+        <div class="location">
+            <strong>Salón de Recepciones: Grand Hacienda Ballroom</strong>
+            <p>13209 C E Hawn Fwy, Dallas, TX 75253</p>
+            <button class="btn" onclick="openMaps('13209 C E Hawn Fwy, Dallas, TX 75253')">Ver en el GPS</button>
+        </div>
+        <div class="rsvp">
+            <h2>Confirmar Asistencia</h2>
+            <form onsubmit="sendRSVP(); return false;">
+                <div>
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div>
+                    <label for="phone">Teléfono:</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div>
+                    <label for="guests">Número de Invitados:</label>
+                    <input type="number" id="guests" required>
+                </div>
+                <div>
+                    <label for="message">Mensaje:</label>
+                    <textarea id="message"></textarea>
+                </div>
+                <button type="submit" class="btn-confirm">Confirmar Asistencia</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const eventDate = new Date('2024-07-27T14:00:00');
+            const daysElem = document.getElementById('days');
+            const hoursElem = document.getElementById('hours');
+            const minutesElem = document.getElementById('minutes');
+            const secondsElem = document.getElementById('seconds');
+
+            function updateCountdown() {
+                const now = new Date();
+                const timeLeft = eventDate - now;
+
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                daysElem.textContent = days;
+                hoursElem.textContent = hours;
+                minutesElem.textContent = minutes;
+                secondsElem.textContent = seconds;
+
+                if (timeLeft < 0) {
+                    clearInterval(interval);
+                    document.getElementById('countdown').innerHTML = '¡El evento ha comenzado!';
+                }
+            }
+
+            let interval = setInterval(updateCountdown, 1000);
+        });
+
+        function openMaps(address) {
+            const url = `https://maps.apple.com/?q=${encodeURIComponent(address)}`;
+            window.open(url, '_blank');
+        }
+
+        function sendRSVP() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const guests = document.getElementById('guests').value;
+            const message = document.getElementById('message').value;
+
+            const smsUrl = `sms:+12144173215&body=Nombre: ${encodeURIComponent(name)}%0ATeléfono: ${encodeURIComponent(phone)}%0ANúmero de Invitados: ${encodeURIComponent(guests)}%0AMensaje: ${encodeURIComponent(message)}`;
+            window.open(smsUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
